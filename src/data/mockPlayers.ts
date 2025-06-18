@@ -1,0 +1,425 @@
+import { Player } from '@/types';
+
+// Mock player data for development purposes
+export const mockPlayers: Player[] = [
+  {
+    id: 'p1',
+    name: 'LeBron James',
+    jerseyNumber: '23',
+    position: 'SF',
+    height: '6\'9"',
+    weight: 250,
+    age: 38,
+    team: {
+      id: 't1',
+      name: 'Los Angeles Lakers',
+      abbreviation: 'LAL',
+      conference: 'West',
+      division: 'Pacific',
+      location: 'Los Angeles, CA',
+      primaryColor: '#552583',
+      secondaryColor: '#FDB927',
+      seasons: []
+    },
+    careerStats: {
+      gamesPlayed: 1421,
+      gamesStarted: 1420,
+      minutesPerGame: 37.8,
+      fieldGoalPercentage: 0.504,
+      threePointPercentage: 0.345,
+      freeThrowPercentage: 0.734,
+      reboundsPerGame: 7.5,
+      assistsPerGame: 7.3,
+      stealsPerGame: 1.6,
+      blocksPerGame: 0.8,
+      pointsPerGame: 27.2,
+      plusMinus: 4.1,
+      efficiency: 27.3,
+      trueShootingPercentage: 0.586,
+      usageRate: 31.5,
+      winShares: 251.1,
+      boxPlusMinus: 8.9
+    },
+    seasons: [
+      {
+        year: '2020-21',
+        team: {
+          id: 't1',
+          name: 'Los Angeles Lakers',
+          abbreviation: 'LAL',
+          conference: 'West',
+          division: 'Pacific',
+          location: 'Los Angeles, CA',
+          primaryColor: '#552583',
+          secondaryColor: '#FDB927',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 45,
+          gamesStarted: 45,
+          minutesPerGame: 33.4,
+          fieldGoalPercentage: 0.513,
+          threePointPercentage: 0.365,
+          freeThrowPercentage: 0.698,
+          reboundsPerGame: 8.0,
+          assistsPerGame: 7.8,
+          stealsPerGame: 1.1,
+          blocksPerGame: 0.6,
+          pointsPerGame: 25.0,
+          plusMinus: 5.7,
+          efficiency: 23.5,
+          trueShootingPercentage: 0.603,
+          usageRate: 30.5,
+          winShares: 6.1,
+          boxPlusMinus: 7.2
+        }
+      },
+      {
+        year: '2021-22',
+        team: {
+          id: 't1',
+          name: 'Los Angeles Lakers',
+          abbreviation: 'LAL',
+          conference: 'West',
+          division: 'Pacific',
+          location: 'Los Angeles, CA',
+          primaryColor: '#552583',
+          secondaryColor: '#FDB927',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 56,
+          gamesStarted: 56,
+          minutesPerGame: 37.2,
+          fieldGoalPercentage: 0.524,
+          threePointPercentage: 0.359,
+          freeThrowPercentage: 0.756,
+          reboundsPerGame: 8.2,
+          assistsPerGame: 6.2,
+          stealsPerGame: 1.3,
+          blocksPerGame: 1.1,
+          pointsPerGame: 30.3,
+          plusMinus: 3.8,
+          efficiency: 29.0,
+          trueShootingPercentage: 0.619,
+          usageRate: 32.3,
+          winShares: 7.5,
+          boxPlusMinus: 8.0
+        }
+      },
+      {
+        year: '2022-23',
+        team: {
+          id: 't1',
+          name: 'Los Angeles Lakers',
+          abbreviation: 'LAL',
+          conference: 'West',
+          division: 'Pacific',
+          location: 'Los Angeles, CA',
+          primaryColor: '#552583',
+          secondaryColor: '#FDB927',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 55,
+          gamesStarted: 55,
+          minutesPerGame: 35.5,
+          fieldGoalPercentage: 0.50,
+          threePointPercentage: 0.321,
+          freeThrowPercentage: 0.761,
+          reboundsPerGame: 8.3,
+          assistsPerGame: 6.8,
+          stealsPerGame: 0.9,
+          blocksPerGame: 0.6,
+          pointsPerGame: 28.9,
+          plusMinus: 2.9,
+          efficiency: 26.5,
+          trueShootingPercentage: 0.580,
+          usageRate: 33.1,
+          winShares: 6.8,
+          boxPlusMinus: 7.2
+        }
+      }
+    ]
+  },
+  {
+    id: 'p2',
+    name: 'Stephen Curry',
+    jerseyNumber: '30',
+    position: 'PG',
+    height: '6\'2"',
+    weight: 185,
+    age: 35,
+    team: {
+      id: 't2',
+      name: 'Golden State Warriors',
+      abbreviation: 'GSW',
+      conference: 'West',
+      division: 'Pacific',
+      location: 'San Francisco, CA',
+      primaryColor: '#1D428A',
+      secondaryColor: '#FFC72C',
+      seasons: []
+    },
+    careerStats: {
+      gamesPlayed: 901,
+      gamesStarted: 897,
+      minutesPerGame: 34.2,
+      fieldGoalPercentage: 0.473,
+      threePointPercentage: 0.428,
+      freeThrowPercentage: 0.908,
+      reboundsPerGame: 4.7,
+      assistsPerGame: 6.5,
+      stealsPerGame: 1.7,
+      blocksPerGame: 0.2,
+      pointsPerGame: 24.7,
+      plusMinus: 5.9,
+      efficiency: 22.0,
+      trueShootingPercentage: 0.624,
+      usageRate: 28.6,
+      winShares: 140.1,
+      boxPlusMinus: 6.7
+    },
+    seasons: [
+      {
+        year: '2020-21',
+        team: {
+          id: 't2',
+          name: 'Golden State Warriors',
+          abbreviation: 'GSW',
+          conference: 'West',
+          division: 'Pacific',
+          location: 'San Francisco, CA',
+          primaryColor: '#1D428A',
+          secondaryColor: '#FFC72C',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 63,
+          gamesStarted: 63,
+          minutesPerGame: 34.2,
+          fieldGoalPercentage: 0.482,
+          threePointPercentage: 0.421,
+          freeThrowPercentage: 0.916,
+          reboundsPerGame: 5.5,
+          assistsPerGame: 5.8,
+          stealsPerGame: 1.2,
+          blocksPerGame: 0.1,
+          pointsPerGame: 32.0,
+          plusMinus: 3.5,
+          efficiency: 30.5,
+          trueShootingPercentage: 0.655,
+          usageRate: 34.8,
+          winShares: 8.2,
+          boxPlusMinus: 7.0
+        }
+      },
+      {
+        year: '2021-22',
+        team: {
+          id: 't2',
+          name: 'Golden State Warriors',
+          abbreviation: 'GSW',
+          conference: 'West',
+          division: 'Pacific',
+          location: 'San Francisco, CA',
+          primaryColor: '#1D428A',
+          secondaryColor: '#FFC72C',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 64,
+          gamesStarted: 64,
+          minutesPerGame: 34.5,
+          fieldGoalPercentage: 0.437,
+          threePointPercentage: 0.380,
+          freeThrowPercentage: 0.923,
+          reboundsPerGame: 5.2,
+          assistsPerGame: 6.3,
+          stealsPerGame: 1.3,
+          blocksPerGame: 0.4,
+          pointsPerGame: 25.5,
+          plusMinus: 6.4,
+          efficiency: 23.5,
+          trueShootingPercentage: 0.601,
+          usageRate: 30.0,
+          winShares: 7.5,
+          boxPlusMinus: 5.9
+        }
+      },
+      {
+        year: '2022-23',
+        team: {
+          id: 't2',
+          name: 'Golden State Warriors',
+          abbreviation: 'GSW',
+          conference: 'West',
+          division: 'Pacific',
+          location: 'San Francisco, CA',
+          primaryColor: '#1D428A',
+          secondaryColor: '#FFC72C',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 56,
+          gamesStarted: 56,
+          minutesPerGame: 34.7,
+          fieldGoalPercentage: 0.491,
+          threePointPercentage: 0.429,
+          freeThrowPercentage: 0.915,
+          reboundsPerGame: 6.1,
+          assistsPerGame: 6.3,
+          stealsPerGame: 0.9,
+          blocksPerGame: 0.4,
+          pointsPerGame: 29.4,
+          plusMinus: 5.1,
+          efficiency: 28.2,
+          trueShootingPercentage: 0.652,
+          usageRate: 31.7,
+          winShares: 9.0,
+          boxPlusMinus: 7.8
+        }
+      }
+    ]
+  },
+  {
+    id: 'p3',
+    name: 'Giannis Antetokounmpo',
+    jerseyNumber: '34',
+    position: 'PF',
+    height: '6\'11"',
+    weight: 242,
+    age: 28,
+    team: {
+      id: 't3',
+      name: 'Milwaukee Bucks',
+      abbreviation: 'MIL',
+      conference: 'East',
+      division: 'Central',
+      location: 'Milwaukee, WI',
+      primaryColor: '#00471B',
+      secondaryColor: '#EEE1C6',
+      seasons: []
+    },
+    careerStats: {
+      gamesPlayed: 710,
+      gamesStarted: 673,
+      minutesPerGame: 32.9,
+      fieldGoalPercentage: 0.537,
+      threePointPercentage: 0.287,
+      freeThrowPercentage: 0.723,
+      reboundsPerGame: 9.4,
+      assistsPerGame: 4.7,
+      stealsPerGame: 1.1,
+      blocksPerGame: 1.3,
+      pointsPerGame: 22.6,
+      plusMinus: 4.2,
+      efficiency: 25.1,
+      trueShootingPercentage: 0.611,
+      usageRate: 28.3,
+      winShares: 105.5,
+      boxPlusMinus: 6.0
+    },
+    seasons: [
+      {
+        year: '2020-21',
+        team: {
+          id: 't3',
+          name: 'Milwaukee Bucks',
+          abbreviation: 'MIL',
+          conference: 'East',
+          division: 'Central',
+          location: 'Milwaukee, WI',
+          primaryColor: '#00471B',
+          secondaryColor: '#EEE1C6',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 61,
+          gamesStarted: 61,
+          minutesPerGame: 33.0,
+          fieldGoalPercentage: 0.569,
+          threePointPercentage: 0.303,
+          freeThrowPercentage: 0.685,
+          reboundsPerGame: 11.0,
+          assistsPerGame: 5.9,
+          stealsPerGame: 1.2,
+          blocksPerGame: 1.2,
+          pointsPerGame: 28.1,
+          plusMinus: 8.3,
+          efficiency: 32.3,
+          trueShootingPercentage: 0.633,
+          usageRate: 31.5,
+          winShares: 11.2,
+          boxPlusMinus: 8.9
+        }
+      },
+      {
+        year: '2021-22',
+        team: {
+          id: 't3',
+          name: 'Milwaukee Bucks',
+          abbreviation: 'MIL',
+          conference: 'East',
+          division: 'Central',
+          location: 'Milwaukee, WI',
+          primaryColor: '#00471B',
+          secondaryColor: '#EEE1C6',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 67,
+          gamesStarted: 67,
+          minutesPerGame: 32.9,
+          fieldGoalPercentage: 0.553,
+          threePointPercentage: 0.293,
+          freeThrowPercentage: 0.722,
+          reboundsPerGame: 11.6,
+          assistsPerGame: 5.8,
+          stealsPerGame: 1.1,
+          blocksPerGame: 1.4,
+          pointsPerGame: 29.9,
+          plusMinus: 7.8,
+          efficiency: 34.0,
+          trueShootingPercentage: 0.630,
+          usageRate: 33.5,
+          winShares: 12.9,
+          boxPlusMinus: 9.3
+        }
+      },
+      {
+        year: '2022-23',
+        team: {
+          id: 't3',
+          name: 'Milwaukee Bucks',
+          abbreviation: 'MIL',
+          conference: 'East',
+          division: 'Central',
+          location: 'Milwaukee, WI',
+          primaryColor: '#00471B',
+          secondaryColor: '#EEE1C6',
+          seasons: []
+        },
+        stats: {
+          gamesPlayed: 63,
+          gamesStarted: 63,
+          minutesPerGame: 32.1,
+          fieldGoalPercentage: 0.553,
+          threePointPercentage: 0.273,
+          freeThrowPercentage: 0.645,
+          reboundsPerGame: 11.8,
+          assistsPerGame: 5.7,
+          stealsPerGame: 0.8,
+          blocksPerGame: 0.8,
+          pointsPerGame: 31.1,
+          plusMinus: 7.5,
+          efficiency: 34.5,
+          trueShootingPercentage: 0.609,
+          usageRate: 34.3,
+          winShares: 10.6,
+          boxPlusMinus: 8.5
+        }
+      }
+    ]
+  }
+];
