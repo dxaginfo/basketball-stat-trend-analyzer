@@ -1,64 +1,64 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { 
-  Player, 
-  Team, 
-  PlayerStats, 
-  TeamStats, 
-  DataContextType,
-  TimeSeriesDataPoint
-} from '@/types';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockPlayers } from '@/data/mockPlayers';
 import { mockTeams } from '@/data/mockTeams';
+import { Player, Team, Season, PlayerStats } from '@/types';
 
-// Create the context with a default value
-const DataContext = createContext<DataContextType | undefined>(undefined);
+interface DataContextProps {
+  players: Player[];
+  teams: Team[];
+  loading: boolean;
+  error: Error | null;
+  getPlayerSeasonStats: (playerId: string, season: string) => PlayerStats | null;
+  getPlayerById: (playerId: string) => Player | null;
+  getTeamById: (teamId: string) => Team | null;
+  getAllSeasons: () => string[];
+  getPlayersByTeam: (teamId: string) => Player[];
+  comparePlayersOverTime: (playerIds: string[], metric: keyof PlayerStats) => any[];
+}
 
-// Provider component
-export const DataProvider = ({ children }: { children: ReactNode }) => {
+const DataContext = createContext<DataContextProps | undefined>(undefined);
+
+export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  // Simulate loading data from an API
   useEffect(() => {
+    // Simulate API call with mock data
     const loadData = async () => {
       try {
-        // In a real app, these would be API calls
-        // For now, we'll use mock data
+        // In a real app, you would fetch data from an API
         setPlayers(mockPlayers);
         setTeams(mockTeams);
-        setIsLoading(false);
+        setLoading(false);
       } catch (err) {
-        setError('Failed to load data');
-        setIsLoading(false);
+        setError(err as Error);
+        setLoading(false);
       }
     };
 
-    // Simulate network delay
-    const timer = setTimeout(() => {
-      loadData();
-    }, 1000);
-
-    return () => clearTimeout(timer);
+    loadData();
   }, []);
 
-  // Helper functions
-  const getPlayer = (id: string) => players.find(player => player.id === id);
-  
-  const getTeam = (id: string) => teams.find(team => team.id === id);
-  
-  const getPlayerSeasonStats = (playerId: string, season: string) => {
-    const player = getPlayer(playerId);
-    return player?.seasons.find(s => s.year === season)?.stats;
+  const getPlayerSeasonStats = (playerId: string, season: string): PlayerStats | null => {
+    const player = players.find(p => p.id === playerId);
+    if (!player) return null;
+
+    const seasonData = player.seasons.find(s => s.year === season);
+    return seasonData ? seasonData.stats : null;
   };
-  
-  const getTeamSeasonStats = (teamId: string, season: string) => {
-    const team = getTeam(teamId);
-    return team?.seasons.find(s => s.year === season)?.stats;
+
+  const getPlayerById = (playerId: string): Player | null => {
+    return players.find(p => p.id === playerId) || null;
   };
-  
-  const getAllSeasons = () => {
+
+  const getTeamById = (teamId: string): Team | null => {
+    return teams.find(t => t.id === teamId) || null;
+  };
+
+  const getAllSeasons = (): string[] => {
+    // Extract unique seasons from all player data
     const seasonsSet = new Set<string>();
     
     players.forEach(player => {
@@ -69,98 +69,53 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     
     return Array.from(seasonsSet).sort();
   };
-  
-  const getPlayerTimeSeriesData = (playerId: string, metric: keyof PlayerStats): TimeSeriesDataPoint[] => {
-    const player = getPlayer(playerId);
-    if (!player) return [];
-    
-    return player.seasons.map(season => ({
-      year: season.year,
-      [player.name]: season.stats[metric] as number,
-    }));
+
+  const getPlayersByTeam = (teamId: string): Player[] => {
+    return players.filter(player => player.team.id === teamId);
   };
-  
-  const getTeamTimeSeriesData = (teamId: string, metric: keyof TeamStats): TimeSeriesDataPoint[] => {
-    const team = getTeam(teamId);
-    if (!team) return [];
+
+  const comparePlayersOverTime = (playerIds: string[], metric: keyof PlayerStats): any[] => {
+    // For each selected player, get their performance over time for the selected metric
+    const allSeasons = getAllSeasons();
     
-    return team.seasons.map(season => ({
-      year: season.year,
-      [team.name]: season.stats[metric] as number,
-    }));
-  };
-  
-  const comparePlayersOverTime = (playerIds: string[], metric: keyof PlayerStats): TimeSeriesDataPoint[] => {
-    // Get all seasons across all selected players
-    const allSeasons = new Set<string>();
-    playerIds.forEach(id => {
-      const player = getPlayer(id);
-      player?.seasons.forEach(season => allSeasons.add(season.year));
-    });
-    
-    const sortedSeasons = Array.from(allSeasons).sort();
-    
-    return sortedSeasons.map(year => {
-      const dataPoint: TimeSeriesDataPoint = { year };
+    return allSeasons.map(season => {
+      const dataPoint: any = { season };
       
-      playerIds.forEach(id => {
-        const player = getPlayer(id);
+      playerIds.forEach(playerId => {
+        const player = getPlayerById(playerId);
         if (!player) return;
         
-        const seasonStats = player.seasons.find(s => s.year === year)?.stats;
-        dataPoint[player.name] = seasonStats ? seasonStats[metric] as number : 0;
-      });
-      
-      return dataPoint;
-    });
-  };
-  
-  const compareTeamsOverTime = (teamIds: string[], metric: keyof TeamStats): TimeSeriesDataPoint[] => {
-    // Get all seasons across all selected teams
-    const allSeasons = new Set<string>();
-    teamIds.forEach(id => {
-      const team = getTeam(id);
-      team?.seasons.forEach(season => allSeasons.add(season.year));
-    });
-    
-    const sortedSeasons = Array.from(allSeasons).sort();
-    
-    return sortedSeasons.map(year => {
-      const dataPoint: TimeSeriesDataPoint = { year };
-      
-      teamIds.forEach(id => {
-        const team = getTeam(id);
-        if (!team) return;
-        
-        const seasonStats = team.seasons.find(s => s.year === year)?.stats;
-        dataPoint[team.name] = seasonStats ? seasonStats[metric] as number : 0;
+        const seasonStats = getPlayerSeasonStats(playerId, season);
+        if (seasonStats) {
+          dataPoint[player.name] = seasonStats[metric];
+        }
       });
       
       return dataPoint;
     });
   };
 
-  const value = {
-    players,
-    teams,
-    isLoading,
-    error,
-    getPlayer,
-    getTeam,
-    getPlayerSeasonStats,
-    getTeamSeasonStats,
-    getAllSeasons,
-    getPlayerTimeSeriesData,
-    getTeamTimeSeriesData,
-    comparePlayersOverTime,
-    compareTeamsOverTime,
-  };
-
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+  return (
+    <DataContext.Provider
+      value={{
+        players,
+        teams,
+        loading,
+        error,
+        getPlayerSeasonStats,
+        getPlayerById,
+        getTeamById,
+        getAllSeasons,
+        getPlayersByTeam,
+        comparePlayersOverTime,
+      }}
+    >
+      {children}
+    </DataContext.Provider>
+  );
 };
 
-// Custom hook to use the context
-export const useData = () => {
+export const useData = (): DataContextProps => {
   const context = useContext(DataContext);
   if (context === undefined) {
     throw new Error('useData must be used within a DataProvider');
