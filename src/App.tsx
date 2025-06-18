@@ -4,15 +4,14 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { Dashboard } from '@/components/layout/Dashboard'
 import { useData } from '@/context/DataContext'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { PlayerAnalysis } from '@/components/player/PlayerAnalysis'
-import { TeamAnalysis } from '@/components/team/TeamAnalysis'
-import { ComparisonView } from '@/components/comparison/ComparisonView'
+import { PlayerComparison } from '@/components/stats/PlayerComparison'
+import { StatTrendChart } from '@/components/stats/StatTrendChart'
 
 function App() {
-  const { isLoading } = useData()
+  const { loading } = useData()
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-4">
@@ -33,23 +32,19 @@ function App() {
         <Sidebar isOpen={isSidebarOpen} />
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
           <Tabs defaultValue="dashboard" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8">
+            <TabsList className="grid w-full grid-cols-3 mb-8">
               <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-              <TabsTrigger value="players">Player Analysis</TabsTrigger>
-              <TabsTrigger value="teams">Team Analysis</TabsTrigger>
-              <TabsTrigger value="comparison">Comparisons</TabsTrigger>
+              <TabsTrigger value="trends">Trend Analysis</TabsTrigger>
+              <TabsTrigger value="comparison">Player Comparison</TabsTrigger>
             </TabsList>
             <TabsContent value="dashboard">
               <Dashboard />
             </TabsContent>
-            <TabsContent value="players">
-              <PlayerAnalysis />
-            </TabsContent>
-            <TabsContent value="teams">
-              <TeamAnalysis />
+            <TabsContent value="trends">
+              <StatTrendChart />
             </TabsContent>
             <TabsContent value="comparison">
-              <ComparisonView />
+              <PlayerComparison />
             </TabsContent>
           </Tabs>
         </main>
