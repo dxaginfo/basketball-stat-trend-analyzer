@@ -1,53 +1,12 @@
-// Player types
-export interface Player {
-  id: string;
-  name: string;
-  jerseyNumber: string;
-  position: string;
-  team: Team;
-  height: string;
-  weight: number;
-  age: number;
-  seasons: Season[];
-  careerStats: PlayerStats;
-  imageSrc?: string;
-}
-
-export interface Season {
-  year: string;
-  team: Team;
-  stats: PlayerStats;
-}
-
-export interface PlayerStats {
-  gamesPlayed: number;
-  gamesStarted: number;
-  minutesPerGame: number;
-  fieldGoalPercentage: number;
-  threePointPercentage: number;
-  freeThrowPercentage: number;
-  reboundsPerGame: number;
-  assistsPerGame: number;
-  stealsPerGame: number;
-  blocksPerGame: number;
-  pointsPerGame: number;
-  plusMinus: number;
-  efficiency: number;
-  trueShootingPercentage: number;
-  usageRate: number;
-  winShares: number;
-  boxPlusMinus: number;
-}
-
 // Team types
 export interface Team {
   id: string;
   name: string;
   abbreviation: string;
+  city: string;
   conference: 'East' | 'West';
   division: string;
-  location: string;
-  logo?: string;
+  logo: string;
   primaryColor: string;
   secondaryColor: string;
   seasons: TeamSeason[];
@@ -55,14 +14,13 @@ export interface Team {
 
 export interface TeamSeason {
   year: string;
-  wins: number;
-  losses: number;
-  standing: number;
   stats: TeamStats;
-  players: string[]; // Player IDs
+  standings: TeamStandings;
 }
 
 export interface TeamStats {
+  wins: number;
+  losses: number;
   pointsPerGame: number;
   pointsAllowedPerGame: number;
   fieldGoalPercentage: number;
@@ -80,50 +38,107 @@ export interface TeamStats {
   netRating: number;
 }
 
-// Chart and visualization types
-export interface DataPoint {
+export interface TeamStandings {
+  conferenceRank: number;
+  divisionRank: number;
+  playoffSeed?: number;
+  gamesBack: number;
+}
+
+// Player types
+export interface Player {
+  id: string;
   name: string;
-  value: number;
-  color?: string;
+  position: Position;
+  height: string;
+  weight: number;
+  age: number;
+  jerseyNumber: string;
+  team: {
+    id: string;
+    name: string;
+    abbreviation: string;
+  };
+  college?: string;
+  country: string;
+  draftYear?: number;
+  draftRound?: number;
+  draftPick?: number;
+  seasons: Season[];
 }
 
-export interface TimeSeriesDataPoint {
+export type Position = 'PG' | 'SG' | 'SF' | 'PF' | 'C' | 'G' | 'F' | 'G-F' | 'F-C';
+
+export interface Season {
   year: string;
-  [key: string]: string | number;
+  team: {
+    id: string;
+    name: string;
+    abbreviation: string;
+  };
+  stats: PlayerStats;
 }
 
-export interface ChartConfig {
-  id: string;
-  title: string;
-  type: 'bar' | 'line' | 'area' | 'pie' | 'radar';
-  dataKey: keyof PlayerStats | keyof TeamStats;
-  displayName: string;
-  color?: string;
-  category?: string;
+export interface PlayerStats {
+  gamesPlayed: number;
+  gamesStarted: number;
+  minutesPerGame: number;
+  pointsPerGame: number;
+  assistsPerGame: number;
+  reboundsPerGame: number;
+  stealsPerGame: number;
+  blocksPerGame: number;
+  turnoversPerGame: number;
+  fieldGoalPercentage: number;
+  threePointPercentage: number;
+  freeThrowPercentage: number;
+  fieldGoalsMade: number;
+  fieldGoalsAttempted: number;
+  threePointsMade: number;
+  threePointsAttempted: number;
+  freeThrowsMade: number;
+  freeThrowsAttempted: number;
+  offensiveRebounds: number;
+  defensiveRebounds: number;
+  personalFouls: number;
+  plusMinus: number;
+  trueShootingPercentage: number;
+  playerEfficiencyRating: number;
+  valueOverReplacement: number;
 }
 
-export interface ComparisonConfig {
-  id: string;
-  title: string;
-  metrics: (keyof PlayerStats | keyof TeamStats)[];
-  entities: string[]; // Player or Team IDs
-  type: 'player' | 'team';
-  timeRange: [string, string]; // [startYear, endYear]
+// Statistics types for visualization
+export interface StatTrend {
+  season: string;
+  value: number;
 }
 
-// Context types
-export interface DataContextType {
-  players: Player[];
-  teams: Team[];
-  isLoading: boolean;
-  error: string | null;
-  getPlayer: (id: string) => Player | undefined;
-  getTeam: (id: string) => Team | undefined;
-  getPlayerSeasonStats: (playerId: string, season: string) => PlayerStats | undefined;
-  getTeamSeasonStats: (teamId: string, season: string) => TeamStats | undefined;
-  getAllSeasons: () => string[];
-  getPlayerTimeSeriesData: (playerId: string, metric: keyof PlayerStats) => TimeSeriesDataPoint[];
-  getTeamTimeSeriesData: (teamId: string, metric: keyof TeamStats) => TimeSeriesDataPoint[];
-  comparePlayersOverTime: (playerIds: string[], metric: keyof PlayerStats) => TimeSeriesDataPoint[];
-  compareTeamsOverTime: (teamIds: string[], metric: keyof TeamStats) => TimeSeriesDataPoint[];
+export interface PlayerStatComparison {
+  player1: Player;
+  player2: Player;
+  stat: keyof PlayerStats;
+  player1Stats: StatTrend[];
+  player2Stats: StatTrend[];
+}
+
+export interface TeamStatComparison {
+  team1: Team;
+  team2: Team;
+  stat: keyof TeamStats;
+  team1Stats: StatTrend[];
+  team2Stats: StatTrend[];
+}
+
+// Filter and sorting options
+export interface StatFilter {
+  minValue?: number;
+  maxValue?: number;
+  statType: keyof PlayerStats | keyof TeamStats;
+}
+
+export type SortDirection = 'asc' | 'desc';
+
+export interface SortOption {
+  field: keyof PlayerStats | keyof TeamStats;
+  direction: SortDirection;
 }
